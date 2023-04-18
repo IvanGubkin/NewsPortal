@@ -1,0 +1,7 @@
+{% extends 'flatpages/index.html' %}
+{% block content %}
+Имя
+Фамилия: {{ context.lastname }}
+Email: {{ context.email }}
+<a class="nav-link" href="/accounts/logout/">Выход</a>
+{% endblock content%}
