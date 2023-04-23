@@ -4,4 +4,5 @@
 Фамилия: {{ context.lastname }}
 Email: {{ context.email }}
 <a class="nav-link" href="/accounts/logout/">Выход</a>
+<a href="{% url 'UpdateUserAuthor' %}">Стать автором</a>
 {% endblock content%}

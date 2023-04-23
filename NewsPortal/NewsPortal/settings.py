@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.yandex',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -137,6 +138,9 @@ AUTHENTICATION_BACKENDS = [
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+# Куда перенаправлять после входи или выхода
+LOGIN_REDIRECT_URL = '/news/'
+LOGOUT_REDIRECT_URL = '/news/'
 
 # Добавляем константу для папки статик где лежит ксс у нас
 STATICFILES_DIRS = [BASE_DIR / "static"]
