@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -156,4 +157,114 @@ ACCOUNT_FORMS = {
     'signup': 'Accounts.forms.CastomCreateUser',
 }
 
+# Настраиваем логирование
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
 
+    'filters': {
+        'debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+
+
+    'handlers': {
+        'console_debug': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'debug',
+            'filters': ['debug_true'],
+        },
+        'console_warning': {
+            'level': 'WARNING',
+            'class': 'logging.StreamHandler',
+            'formatter': 'warning',
+            'filters': ['debug_true'],
+        },
+        'console_error': {
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+            'formatter': 'error and critical',
+            'filters': ['debug_true'],
+        },
+        'general_info': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': f'{BASE_DIR}/log/general.log',
+            'formatter': 'general_security',
+            'filters': ['debug_false'],
+        },
+        'errors': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': f'{BASE_DIR}/log/errors.log',
+            'formatter': 'error and critical',
+        },
+        'security': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': f'{BASE_DIR}/log/security.log',
+            'formatter': 'general_security',
+        },
+        'mail_error': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'warning',
+            'filters': ['debug_false'],
+        },
+    },
+
+    'loggers': {
+        'django': {
+            'handlers': ['console_debug', 'console_warning',
+                         'console_error', 'general_info'],
+            'level': 'DEBUG',
+        },
+        'django.request': {
+            'handlers': ['errors', 'mail_error'],
+            'level': 'ERROR',
+        },
+        'django.server': {
+            'handlers': ['errors', 'mail_error'],
+            'level': 'ERROR',
+        },
+        'django.template': {
+            'handlers': ['errors'],
+            'level': 'ERROR',
+        },
+        'django.db.backends': {
+            'handlers': ['errors'],
+            'level': 'ERROR',
+        },
+        'django.security': {
+            'handlers': ['security'],
+            'level': 'DEBUG',
+        },
+    },
+
+    'formatters': {
+        'debug': {
+            'format': '({asctime}) {levelname} {message}',
+            'style': '{',
+        },
+        'warning': {
+            'format': '({asctime}) {levelname} {pathname}'
+                      '{message}',
+            'style': '{',
+        },
+        'error and critical': {
+            'format': '({asctime}) {levelname} {pathname}'
+                      '{exc_info} {message}',
+            'style': '{',
+        },
+        'general_security': {
+            'format': '({asctime}) {levelname} {module} '
+                      '{message}',
+            'style': '{',
+        },
+    },
+}
